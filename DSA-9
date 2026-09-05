@@ -1,0 +1,77 @@
+"""
+Problem: Word Search
+LeetCode #79
+
+Given an m x n grid of characters and a string word,
+return True if the word exists in the grid.
+
+The word can be constructed from sequentially adjacent cells
+(horizontal or vertical). A cell cannot be used more than once
+in the same path.
+
+Approach:
+Backtracking / DFS
+
+1. Start DFS from every cell in the board.
+2. Check whether the current cell matches the current character.
+3. Temporarily mark the cell as visited.
+4. Explore all four directions:
+   - Down
+   - Up
+   - Right
+   - Left
+5. If the complete word is found, return True.
+6. Restore the cell before backtracking.
+
+Time Complexity: O(m * n * 4^L)
+Space Complexity: O(L)
+
+Where:
+m = number of rows
+n = number of columns
+L = length of the word
+"""
+
+
+class Solution:
+    def exist(self, board, word):
+
+        def backtrack(i, j, k):
+            # Entire word found
+            if k == len(word):
+                return True
+
+            # Boundary check and character match
+            if (
+                i < 0
+                or i >= len(board)
+                or j < 0
+                or j >= len(board[0])
+                or board[i][j] != word[k]
+            ):
+                return False
+
+            # Mark current cell as visited
+            temp = board[i][j]
+            board[i][j] = ""
+
+            # Explore four directions
+            found = (
+                backtrack(i + 1, j, k + 1)
+                or backtrack(i - 1, j, k + 1)
+                or backtrack(i, j + 1, k + 1)
+                or backtrack(i, j - 1, k + 1)
+            )
+
+            # Restore cell for backtracking
+            board[i][j] = temp
+
+            return found
+
+        # Try starting from every cell
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if backtrack(i, j, 0):
+                    return True
+
+        return False
