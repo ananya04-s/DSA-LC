@@ -1,0 +1,59 @@
+"""
+Problem: Letter Combinations of a Phone Number
+LeetCode #17
+
+Given a string containing digits from 2-9 inclusive,
+return all possible letter combinations that the number
+could represent.
+
+The mapping of digits to letters is the same as on a
+telephone keypad.
+
+Approach:
+Backtracking
+
+1. Create a mapping of digits to their corresponding letters.
+2. Start with an empty combination.
+3. For each digit, explore every possible letter mapped to it.
+4. Recursively build combinations.
+5. When all digits are processed, add the completed combination
+   to the result list.
+
+Time Complexity: O(4^n * n)
+Space Complexity: O(n) excluding the output list.
+"""
+
+from typing import List
+
+
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if not digits:
+            return []
+
+        phone = {
+            "2": "abc",
+            "3": "def",
+            "4": "ghi",
+            "5": "jkl",
+            "6": "mno",
+            "7": "pqrs",
+            "8": "tuv",
+            "9": "wxyz",
+        }
+
+        result = []
+
+        def backtrack(combination, next_digits):
+            # Base case: all digits have been processed
+            if not next_digits:
+                result.append(combination)
+                return
+
+            # Get letters corresponding to the current digit
+            for letter in phone[next_digits[0]]:
+                backtrack(combination + letter, next_digits[1:])
+
+        backtrack("", digits)
+
+        return result
