@@ -1,0 +1,63 @@
+"""
+Problem: Multiply Strings
+LeetCode #43
+
+Given two non-negative integers num1 and num2 represented
+as strings, return the product of num1 and num2, also
+represented as a string.
+
+Note:
+You must not convert the input strings directly into integers.
+
+Approach:
+Manual Multiplication
+
+1. Create a result array of size n1 + n2.
+2. Multiply each digit of num1 with each digit of num2,
+   starting from right to left.
+3. Store the multiplication result at the appropriate
+   positions in the result array.
+4. Handle carry values.
+5. Convert the result array into a string while skipping
+   leading zeros.
+
+Time Complexity: O(n * m)
+Space Complexity: O(n + m)
+"""
+
+
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        if num1 == "0" or num2 == "0":
+            return "0"
+
+        n1, n2 = len(num1), len(num2)
+
+        # Maximum possible length of product
+        result = [0] * (n1 + n2)
+
+        # Multiply digits from right to left
+        for i in range(n1 - 1, -1, -1):
+            for j in range(n2 - 1, -1, -1):
+
+                digit1 = ord(num1[i]) - ord("0")
+                digit2 = ord(num2[j]) - ord("0")
+
+                multiplication = digit1 * digit2
+
+                p1 = i + j
+                p2 = i + j + 1
+
+                total = multiplication + result[p2]
+
+                result[p2] = total % 10
+                result[p1] += total // 10
+
+        # Convert result array to string and skip leading zeros
+        product_string = ""
+
+        for digit in result:
+            if not (product_string == "" and digit == 0):
+                product_string += str(digit)
+
+        return product_string
